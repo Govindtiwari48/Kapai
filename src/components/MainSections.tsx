@@ -343,7 +343,7 @@ export function MainSections() {
               <span className="btn-icon">🍽️</span>
               <span className="btn-text">
                 <span className="btn-label">Reserve via</span>
-                <span className="btn-name">EazyDiner</span>
+                <span className="btn-name">EazyDinner</span>
               </span>
             </a>
             <a href="tel:+919839270027" className="platform-btn reveal" style={{ transitionDelay: '0.3s' }}>
