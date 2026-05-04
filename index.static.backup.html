@@ -1,0 +1,2119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kapai Coffee House & Bistro — Kanpur's Specialty Coffee</title>
+  <meta name="description" content="Kapai is a community-driven Speciality Coffee House and Bistro in Kanpur. Premium coffees, all-day breakfast, soothing ambience. #Antisarkapai" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&family=Dancing+Script:wght@500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ═══════════════════════════════════════════════════
+       ROOT VARIABLES & RESET
+    ═══════════════════════════════════════════════════ */
+    :root {
+      --bg-deep:       #080401;
+      --bg-dark:       #100802;
+      --bg-card:       #1a0f06;
+      --bg-card2:      #221508;
+      --gold:          #c9963a;
+      --gold-light:    #e8ba6a;
+      --gold-pale:     #f5dfa0;
+      --cream:         #f4ede0;
+      --cream-muted:   #c8b89a;
+      --brown-muted:   #6e5030;
+      --border:        rgba(201,150,58,0.18);
+      --border-soft:   rgba(201,150,58,0.08);
+      --shadow:        0 32px 80px rgba(0,0,0,0.8);
+      --font-serif:    'Playfair Display', Georgia, serif;
+      --font-display:  'Cormorant Garamond', serif;
+      --font-sans:     'Inter', system-ui, sans-serif;
+      --font-script:   'Dancing Script', cursive;
+      --ease-silk:     cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      background: var(--bg-deep);
+      color: var(--cream);
+      font-family: var(--font-sans);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    img { display: block; width: 100%; object-fit: cover; }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: none; border: none; background: none; font-family: inherit; }
+    ul { list-style: none; }
+
+    /* ═══════════════════════════════════════════════════
+       CUSTOM CURSOR
+    ═══════════════════════════════════════════════════ */
+    .cursor-dot,
+    .cursor-ring {
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s;
+    }
+    .cursor-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid var(--gold);
+      transition: width 0.25s var(--ease-silk),
+                  height 0.25s var(--ease-silk),
+                  opacity 0.3s;
+      opacity: 0.6;
+    }
+    .cursor-ring.expand {
+      width: 56px; height: 56px;
+      opacity: 0.9;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       PAGE LOADER
+    ═══════════════════════════════════════════════════ */
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-deep);
+      z-index: 9998;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      transition: opacity 0.8s var(--ease-silk), visibility 0.8s;
+    }
+    #loader.hide { opacity: 0; visibility: hidden; }
+
+    .loader-logo {
+      font-family: var(--font-serif);
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      opacity: 0;
+      animation: loaderFadeIn 0.8s 0.3s forwards;
+    }
+    .loader-tagline {
+      font-family: var(--font-script);
+      font-size: 1.2rem;
+      color: var(--cream-muted);
+      opacity: 0;
+      animation: loaderFadeIn 0.8s 0.7s forwards;
+    }
+    .loader-bar {
+      width: 180px; height: 2px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      opacity: 0;
+      animation: loaderFadeIn 0.4s 0.5s forwards;
+    }
+    .loader-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      border-radius: 2px;
+      animation: loadFill 1.8s 0.6s var(--ease-silk) forwards;
+      transform: scaleX(0);
+      transform-origin: left;
+    }
+
+    @keyframes loaderFadeIn {
+      to { opacity: 1; }
+    }
+    @keyframes loadFill {
+      to { transform: scaleX(1); }
+    }
+
+    /* ═══════════════════════════════════════════════════
+       NAVIGATION
+    ═══════════════════════════════════════════════════ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 24px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.4s var(--ease-silk),
+                  padding 0.4s var(--ease-silk),
+                  border-color 0.4s;
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled {
+      background: rgba(8,4,1,0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 16px 48px;
+      border-bottom-color: var(--border-soft);
+    }
+
+    .nav-logo {
+      font-family: var(--font-serif);
+      font-size: 1.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--gold-light);
+    }
+    .nav-logo span {
+      font-style: italic;
+      font-weight: 400;
+      color: var(--cream-muted);
+      font-size: 0.75em;
+      letter-spacing: 0.2em;
+      display: block;
+      margin-top: -4px;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+    .nav-links a {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--cream-muted);
+      position: relative;
+      transition: color 0.3s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: var(--gold);
+      transition: width 0.3s var(--ease-silk);
+    }
+    .nav-links a:hover { color: var(--gold-light); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-cta {
+      padding: 10px 24px;
+      border: 1px solid var(--gold);
+      border-radius: 0;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      transition: background 0.3s, color 0.3s;
+    }
+    .nav-cta:hover {
+      background: var(--gold);
+      color: var(--bg-deep);
+    }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: none;
+    }
+    .nav-hamburger span {
+      width: 26px; height: 1.5px;
+      background: var(--cream);
+      transition: all 0.3s;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════════════════ */
+    #hero {
+      position: relative;
+      height: 100vh;
+      min-height: 700px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('Kapai images/sweet red coffe with flower.jpg');
+      background-size: cover;
+      background-position: center 30%;
+      transform: scale(1.08);
+      transition: transform 12s linear;
+    }
+    #hero.loaded .hero-bg {
+      transform: scale(1.0);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(8,4,1,0.88) 0%,
+        rgba(8,4,1,0.55) 50%,
+        rgba(8,4,1,0.75) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 900px;
+      padding: 0 24px;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-script);
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      color: var(--gold);
+      margin-bottom: 18px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: heroIn 1s 2s var(--ease-silk) forwards;
+    }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: clamp(3.2rem, 8vw, 7.5rem);
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      color: var(--cream);
+      margin-bottom: 12px;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: heroIn 1s 2.2s var(--ease-silk) forwards;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-display);
+      font-size: clamp(1rem, 2.2vw, 1.35rem);
+      font-weight: 300;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--cream-muted);
+      margin-bottom: 48px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: heroIn 1s 2.5s var(--ease-silk) forwards;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: heroIn 1s 2.8s var(--ease-silk) forwards;
+    }
+
+    .btn-primary {
+      padding: 15px 40px;
+      background: var(--gold);
+      color: var(--bg-deep);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+      box-shadow: 0 8px 32px rgba(201,150,58,0.3);
+    }
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 16px 48px rgba(201,150,58,0.4);
+    }
+
+    .btn-ghost {
+      padding: 15px 40px;
+      border: 1px solid rgba(244,237,224,0.35);
+      color: var(--cream);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: border-color 0.3s, background 0.3s, transform 0.2s;
+    }
+    .btn-ghost:hover {
+      border-color: var(--gold);
+      background: rgba(201,150,58,0.08);
+      transform: translateY(-2px);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 36px; left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      animation: heroIn 1s 3.2s forwards;
+    }
+    .hero-scroll span {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--cream-muted);
+    }
+    .scroll-line {
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollPulse 2s 3.5s infinite;
+    }
+
+    @keyframes heroIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+
+    /* ═══════════════════════════════════════════════════
+       MARQUEE
+    ═══════════════════════════════════════════════════ */
+    .marquee-wrap {
+      background: var(--gold);
+      padding: 14px 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .marquee-track {
+      display: inline-flex;
+      gap: 0;
+      animation: marquee 22s linear infinite;
+    }
+    .marquee-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 28px;
+      padding: 0 28px;
+      font-family: var(--font-serif);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--bg-deep);
+    }
+    .marquee-dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: rgba(8,4,1,0.4);
+      flex-shrink: 0;
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ═══════════════════════════════════════════════════
+       SECTION COMMONS
+    ═══════════════════════════════════════════════════ */
+    section { padding: 120px 48px; }
+
+    .section-eyebrow {
+      font-family: var(--font-script);
+      font-size: 1.1rem;
+      color: var(--gold);
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.4rem, 5vw, 4.2rem);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--cream);
+    }
+    .section-title em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+
+    .section-desc {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 300;
+      color: var(--cream-muted);
+      line-height: 1.85;
+      max-width: 560px;
+    }
+
+    .gold-rule {
+      width: 50px; height: 1px;
+      background: var(--gold);
+      margin: 24px 0;
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(36px);
+      transition: opacity 0.9s var(--ease-silk),
+                  transform 0.9s var(--ease-silk);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.9s var(--ease-silk),
+                  transform 0.9s var(--ease-silk);
+    }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.9s var(--ease-silk),
+                  transform 0.9s var(--ease-silk);
+    }
+    .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+    /* ═══════════════════════════════════════════════════
+       ABOUT SECTION
+    ═══════════════════════════════════════════════════ */
+    #about {
+      background: var(--bg-dark);
+      padding: 120px 0;
+    }
+
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 640px;
+    }
+
+    .about-image-side {
+      position: relative;
+      overflow: hidden;
+    }
+    .about-image-side img {
+      height: 100%;
+      min-height: 600px;
+      object-position: center top;
+      transition: transform 0.8s var(--ease-silk);
+    }
+    .about-image-side:hover img { transform: scale(1.04); }
+
+    .about-image-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to right,
+        transparent 70%,
+        var(--bg-dark) 100%
+      );
+    }
+
+    .about-badge {
+      position: absolute;
+      bottom: 48px; right: -1px;
+      background: var(--gold);
+      padding: 20px 28px;
+      z-index: 2;
+    }
+    .about-badge p {
+      font-family: var(--font-serif);
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--bg-deep);
+      line-height: 1;
+    }
+    .about-badge span {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(8,4,1,0.65);
+      font-weight: 600;
+    }
+
+    .about-text-side {
+      padding: 80px 72px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: var(--bg-dark);
+    }
+
+    .about-quote {
+      font-family: var(--font-serif);
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1.5;
+      margin: 28px 0;
+      padding-left: 28px;
+      border-left: 2px solid var(--gold);
+    }
+
+    .about-hashtag {
+      font-family: var(--font-script);
+      font-size: 1.8rem;
+      color: var(--gold);
+      margin-top: 16px;
+    }
+
+    .about-features {
+      display: flex;
+      gap: 36px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+    .about-feature {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .about-feature-num {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .about-feature-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--cream-muted);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       SIGNATURE BREWS
+    ═══════════════════════════════════════════════════ */
+    #brews {
+      background: var(--bg-deep);
+      text-align: center;
+    }
+
+    .brews-header {
+      max-width: 700px;
+      margin: 0 auto 72px;
+    }
+
+    .brews-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      margin-top: 64px;
+    }
+
+    .brew-card {
+      position: relative;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+      cursor: none;
+    }
+    .brew-card img {
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s var(--ease-silk);
+    }
+    .brew-card:hover img { transform: scale(1.08); }
+
+    .brew-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(8,4,1,0.95) 0%,
+        rgba(8,4,1,0.4) 45%,
+        transparent 70%
+      );
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 32px 28px;
+      transition: background 0.4s;
+    }
+    .brew-card:hover .brew-card-overlay {
+      background: linear-gradient(
+        to top,
+        rgba(8,4,1,0.98) 0%,
+        rgba(8,4,1,0.65) 55%,
+        rgba(8,4,1,0.1) 100%
+      );
+    }
+
+    .brew-name {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--cream);
+      margin-bottom: 8px;
+    }
+    .brew-desc {
+      font-size: 0.8rem;
+      color: var(--cream-muted);
+      line-height: 1.6;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.4s var(--ease-silk), transform 0.4s var(--ease-silk);
+    }
+    .brew-card:hover .brew-desc {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .brew-tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       FULL-WIDTH CINEMATIC BREAK
+    ═══════════════════════════════════════════════════ */
+    .cinematic-break {
+      position: relative;
+      height: 70vh;
+      min-height: 500px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cinematic-break img {
+      position: absolute;
+      inset: 0;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    .cinematic-break-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(8,4,1,0.62);
+    }
+    .cinematic-text {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 32px;
+    }
+    .cinematic-text h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(2.2rem, 6vw, 5.5rem);
+      font-weight: 900;
+      color: var(--cream);
+      line-height: 1.1;
+    }
+    .cinematic-text h2 em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+    .cinematic-text p {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--cream-muted);
+      margin-top: 18px;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       MENU
+    ═══════════════════════════════════════════════════ */
+    #menu {
+      background: var(--bg-dark);
+    }
+
+    .menu-header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      margin-bottom: 56px;
+    }
+
+    .menu-tabs {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--border);
+    }
+    .menu-tab {
+      padding: 10px 22px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--cream-muted);
+      border-right: 1px solid var(--border);
+      transition: background 0.3s, color 0.3s;
+      cursor: none;
+    }
+    .menu-tab:last-child { border-right: none; }
+    .menu-tab.active {
+      background: var(--gold);
+      color: var(--bg-deep);
+    }
+    .menu-tab:hover:not(.active) {
+      background: var(--border-soft);
+      color: var(--cream);
+    }
+
+    .menu-panel { display: none; }
+    .menu-panel.active { display: block; }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .menu-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+      cursor: none;
+    }
+    .menu-card:hover {
+      border-color: var(--border);
+      transform: translateY(-4px);
+    }
+
+    .menu-card-img {
+      height: 220px;
+      overflow: hidden;
+    }
+    .menu-card-img img {
+      height: 100%;
+      transition: transform 0.5s var(--ease-silk);
+    }
+    .menu-card:hover .menu-card-img img { transform: scale(1.06); }
+
+    .menu-card-body {
+      padding: 22px 24px;
+    }
+    .menu-card-cat {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .menu-card-name {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--cream);
+      margin-bottom: 8px;
+    }
+    .menu-card-desc {
+      font-size: 0.82rem;
+      color: var(--cream-muted);
+      line-height: 1.65;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       VIBE / GALLERY
+    ═══════════════════════════════════════════════════ */
+    #vibe {
+      background: var(--bg-deep);
+      padding-bottom: 0;
+    }
+
+    .vibe-header {
+      text-align: center;
+      margin-bottom: 72px;
+    }
+
+    .vibe-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: auto;
+      gap: 3px;
+    }
+
+    .vibe-cell {
+      overflow: hidden;
+      position: relative;
+      cursor: none;
+    }
+    .vibe-cell img {
+      height: 100%;
+      min-height: 240px;
+      object-fit: cover;
+      transition: transform 0.6s var(--ease-silk);
+      filter: brightness(0.85) saturate(0.9);
+    }
+    .vibe-cell:hover img {
+      transform: scale(1.05);
+      filter: brightness(1) saturate(1.1);
+    }
+
+    .vibe-cell-1 { grid-column: 1 / 6; grid-row: 1; aspect-ratio: 4/3; }
+    .vibe-cell-2 { grid-column: 6 / 9; grid-row: 1; aspect-ratio: 3/4; }
+    .vibe-cell-3 { grid-column: 9 / 13; grid-row: 1; aspect-ratio: 4/3; }
+    .vibe-cell-4 { grid-column: 1 / 4; grid-row: 2; }
+    .vibe-cell-5 { grid-column: 4 / 8; grid-row: 2; aspect-ratio: 16/9; }
+    .vibe-cell-6 { grid-column: 8 / 13; grid-row: 2; }
+
+    .vibe-overlay-card {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(8,4,1,0.7) 0%,
+        transparent 55%
+      );
+      display: flex;
+      align-items: flex-end;
+      padding: 24px;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .vibe-cell:hover .vibe-overlay-card { opacity: 1; }
+    .vibe-overlay-card p {
+      font-family: var(--font-serif);
+      font-size: 0.95rem;
+      font-style: italic;
+      color: var(--cream);
+    }
+
+    .vibe-tagline {
+      text-align: center;
+      padding: 80px 48px;
+    }
+    .vibe-tagline h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.2;
+    }
+    .vibe-tagline h2 em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       SPACE / EXTERIOR
+    ═══════════════════════════════════════════════════ */
+    #space {
+      padding: 0;
+      background: var(--bg-deep);
+    }
+    .space-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 600px;
+    }
+    .space-image { overflow: hidden; }
+    .space-image img {
+      height: 100%;
+      min-height: 560px;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 0.8s var(--ease-silk);
+    }
+    .space-image:hover img { transform: scale(1.04); }
+
+    .space-text {
+      background: var(--bg-card);
+      padding: 80px 72px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-left: 1px solid var(--border-soft);
+    }
+
+    .space-features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      margin-top: 40px;
+    }
+    .space-feat {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 24px;
+      border: 1px solid var(--border-soft);
+      transition: border-color 0.3s;
+    }
+    .space-feat:hover { border-color: var(--border); }
+    .space-feat-icon {
+      font-size: 1.5rem;
+      margin-bottom: 4px;
+    }
+    .space-feat-title {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      color: var(--cream);
+    }
+    .space-feat-desc {
+      font-size: 0.8rem;
+      color: var(--cream-muted);
+      line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       FOUNDER
+    ═══════════════════════════════════════════════════ */
+    #founder {
+      background: var(--bg-dark);
+      padding: 120px 48px;
+    }
+
+    .founder-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .founder-img-wrap {
+      position: relative;
+    }
+    .founder-img-wrap::before {
+      content: '';
+      position: absolute;
+      top: -20px; left: -20px;
+      right: 20px; bottom: 20px;
+      border: 1px solid var(--border);
+      z-index: 0;
+    }
+    .founder-img-wrap img {
+      position: relative;
+      z-index: 1;
+      height: 560px;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    .founder-content {}
+    .founder-note {
+      font-family: var(--font-serif);
+      font-size: clamp(1.3rem, 2.5vw, 1.75rem);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1.65;
+      margin: 28px 0;
+    }
+    .founder-name {
+      font-family: var(--font-script);
+      font-size: 1.4rem;
+      color: var(--gold);
+      margin-top: 28px;
+    }
+    .founder-role {
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--brown-muted);
+      margin-top: 6px;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       DELIVERY / ORDER
+    ═══════════════════════════════════════════════════ */
+    #order {
+      position: relative;
+      padding: 120px 48px;
+      background: var(--bg-deep);
+      overflow: hidden;
+    }
+    #order::before {
+      content: '';
+      position: absolute;
+      top: -200px; left: 50%;
+      width: 800px; height: 800px;
+      transform: translateX(-50%);
+      background: radial-gradient(circle, rgba(201,150,58,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .order-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .order-platforms {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 56px;
+      flex-wrap: wrap;
+    }
+
+    .platform-btn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 36px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--cream);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      transition: border-color 0.3s, background 0.3s, transform 0.2s, box-shadow 0.3s;
+      cursor: none;
+    }
+    .platform-btn:hover {
+      border-color: var(--gold);
+      background: rgba(201,150,58,0.06);
+      transform: translateY(-3px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+    }
+    .platform-btn .btn-icon {
+      font-size: 1.4rem;
+    }
+    .platform-btn .btn-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+    }
+    .platform-btn .btn-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--cream-muted);
+    }
+    .platform-btn .btn-name {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--cream);
+    }
+
+    .order-reserve {
+      margin-top: 48px;
+    }
+    .order-reserve p {
+      font-size: 0.82rem;
+      color: var(--cream-muted);
+      letter-spacing: 0.08em;
+    }
+    .order-reserve a {
+      color: var(--gold);
+      border-bottom: 1px solid rgba(201,150,58,0.3);
+      padding-bottom: 1px;
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .order-reserve a:hover {
+      color: var(--gold-light);
+      border-bottom-color: var(--gold-light);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════════════ */
+    footer {
+      background: var(--bg-card);
+      border-top: 1px solid var(--border-soft);
+      padding: 80px 48px 40px;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 60px;
+      padding-bottom: 60px;
+      border-bottom: 1px solid var(--border-soft);
+    }
+
+    .footer-brand {}
+    .footer-logo {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.06em;
+    }
+    .footer-tagline {
+      font-family: var(--font-script);
+      font-size: 1rem;
+      color: var(--cream-muted);
+      margin-top: 4px;
+    }
+    .footer-desc {
+      font-size: 0.82rem;
+      color: var(--cream-muted);
+      line-height: 1.8;
+      margin-top: 20px;
+      max-width: 280px;
+    }
+
+    .footer-col h4 {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--cream);
+      margin-bottom: 22px;
+      letter-spacing: 0.04em;
+    }
+    .footer-col ul { display: flex; flex-direction: column; gap: 12px; }
+    .footer-col li a {
+      font-size: 0.82rem;
+      color: var(--cream-muted);
+      transition: color 0.3s;
+    }
+    .footer-col li a:hover { color: var(--gold); }
+
+    .footer-address {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .addr-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .addr-icon {
+      font-size: 0.9rem;
+      flex-shrink: 0;
+      color: var(--gold);
+      margin-top: 2px;
+    }
+    .addr-text {
+      font-size: 0.82rem;
+      color: var(--cream-muted);
+      line-height: 1.65;
+    }
+    .addr-text a {
+      color: var(--gold);
+      transition: color 0.3s;
+    }
+    .addr-text a:hover { color: var(--gold-light); }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 28px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-copy {
+      font-size: 0.75rem;
+      color: var(--brown-muted);
+      letter-spacing: 0.08em;
+    }
+    .footer-hash {
+      font-family: var(--font-script);
+      font-size: 1.15rem;
+      color: var(--gold);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       BACK TO TOP
+    ═══════════════════════════════════════════════════ */
+    #back-top {
+      position: fixed;
+      bottom: 36px; right: 36px;
+      width: 48px; height: 48px;
+      background: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: none;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.4s, transform 0.4s;
+      z-index: 50;
+    }
+    #back-top.show { opacity: 1; transform: translateY(0); }
+    #back-top svg {
+      width: 18px; height: 18px;
+      stroke: var(--bg-deep);
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       MOBILE MENU
+    ═══════════════════════════════════════════════════ */
+    .mobile-menu {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-card);
+      z-index: 99;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 36px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s var(--ease-silk), visibility 0.4s;
+    }
+    .mobile-menu.open { opacity: 1; visibility: visible; }
+    .mobile-menu a {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--cream);
+      letter-spacing: 0.06em;
+      transition: color 0.3s;
+    }
+    .mobile-menu a:hover { color: var(--gold); }
+    .mobile-close {
+      position: absolute;
+      top: 24px; right: 36px;
+      font-size: 2rem;
+      color: var(--cream-muted);
+      cursor: none;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      section { padding: 80px 32px; }
+      nav { padding: 20px 32px; }
+      nav.scrolled { padding: 14px 32px; }
+
+      .about-inner { grid-template-columns: 1fr; }
+      .about-image-side img { min-height: 440px; }
+      .about-image-overlay { background: linear-gradient(to bottom, transparent 70%, var(--bg-dark) 100%); }
+      .about-text-side { padding: 56px 40px; }
+
+      .brews-grid { grid-template-columns: repeat(2, 1fr); }
+
+      .founder-inner { grid-template-columns: 1fr; gap: 48px; }
+      .founder-img-wrap img { height: 400px; }
+      .founder-img-wrap::before { display: none; }
+
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+      .space-inner { grid-template-columns: 1fr; }
+      .space-image img { min-height: 380px; }
+      .space-text { padding: 56px 40px; }
+    }
+
+    @media (max-width: 768px) {
+      section { padding: 70px 20px; }
+      nav { padding: 18px 20px; }
+      nav.scrolled { padding: 12px 20px; }
+
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+
+      .hero-title { font-size: clamp(2.8rem, 10vw, 4.5rem); }
+
+      .brews-grid { grid-template-columns: repeat(2, 1fr); }
+
+      .menu-header {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .vibe-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .vibe-cell-1 { grid-column: 1 / 3; grid-row: 1; }
+      .vibe-cell-2 { grid-column: 1 / 2; grid-row: 2; }
+      .vibe-cell-3 { grid-column: 2 / 3; grid-row: 2; }
+      .vibe-cell-4 { grid-column: 1 / 3; grid-row: 3; }
+      .vibe-cell-5 { grid-column: 1 / 2; grid-row: 4; }
+      .vibe-cell-6 { grid-column: 2 / 3; grid-row: 4; }
+
+      .space-features { grid-template-columns: 1fr; }
+
+      .footer-top { grid-template-columns: 1fr; gap: 36px; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+
+      body { cursor: auto; }
+      .cursor-dot, .cursor-ring { display: none; }
+
+      .platform-btn { width: 100%; max-width: 340px; }
+      .order-platforms { flex-direction: column; align-items: center; }
+
+      .about-badge { right: 0; bottom: 32px; }
+
+      #back-top { bottom: 20px; right: 20px; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title { font-size: clamp(2.4rem, 12vw, 3.5rem); }
+      .brews-grid { grid-template-columns: 1fr; }
+      .hero-actions { flex-direction: column; align-items: center; }
+      .btn-primary, .btn-ghost { width: 100%; max-width: 280px; text-align: center; }
+      footer { padding: 60px 20px 28px; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Custom Cursor -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- Loader -->
+  <div id="loader">
+    <div class="loader-logo">KAPAI</div>
+    <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+    <div class="loader-tagline">Coffee House & Bistro · Kanpur</div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" id="mobileClose">✕</button>
+    <a href="#about" onclick="closeMobile()">About</a>
+    <a href="#brews" onclick="closeMobile()">Our Brews</a>
+    <a href="#menu" onclick="closeMobile()">Menu</a>
+    <a href="#vibe" onclick="closeMobile()">The Vibe</a>
+    <a href="#founder" onclick="closeMobile()">Our Story</a>
+    <a href="#order" onclick="closeMobile()">Order Now</a>
+  </div>
+
+  <!-- Navigation -->
+  <nav id="navbar">
+    <div class="nav-logo">
+      KAPAI
+      <span>Coffee House & Bistro</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#brews">Our Brews</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#vibe">The Vibe</a></li>
+      <li><a href="#founder">Our Story</a></li>
+    </ul>
+    <a href="#order" class="nav-cta">Order Now</a>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Kanpur's Finest · Since Day One</p>
+      <h1 class="hero-title">Wake Up.<br><em>Brew</em> Up.</h1>
+      <p class="hero-subtitle">Speciality Coffee House &amp; Bistro — Model Town, Kanpur</p>
+      <div class="hero-actions">
+        <a href="#brews" class="btn-primary">Explore Our Brews</a>
+        <a href="#menu" class="btn-ghost">View Full Menu</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee-wrap" aria-hidden="true">
+    <div class="marquee-track">
+      <!-- First copy -->
+      <span class="marquee-item">Specialty Coffee<span class="marquee-dot"></span></span>
+      <span class="marquee-item">All Day Breakfast<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Community Driven<span class="marquee-dot"></span></span>
+      <span class="marquee-item">#Antisarkapai<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Good Vibes Only<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Kanpur's Premier<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Come for the Coffee<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Stay for the Vibe<span class="marquee-dot"></span></span>
+      <!-- Duplicate for seamless loop -->
+      <span class="marquee-item">Specialty Coffee<span class="marquee-dot"></span></span>
+      <span class="marquee-item">All Day Breakfast<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Community Driven<span class="marquee-dot"></span></span>
+      <span class="marquee-item">#Antisarkapai<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Good Vibes Only<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Kanpur's Premier<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Come for the Coffee<span class="marquee-dot"></span></span>
+      <span class="marquee-item">Stay for the Vibe<span class="marquee-dot"></span></span>
+    </div>
+  </div>
+
+  <!-- About -->
+  <section id="about">
+    <div class="about-inner">
+      <div class="about-image-side reveal-left">
+        <img src="Kapai images/crowd in kapi.jpg" alt="Kapai crowd and community" loading="lazy" />
+        <div class="about-image-overlay"></div>
+        <div class="about-badge">
+          <p>Premium</p>
+          <span>Specialty Coffee</span>
+        </div>
+      </div>
+      <div class="about-text-side reveal-right">
+        <span class="section-eyebrow">Our Philosophy</span>
+        <h2 class="section-title">More Than Coffee.<br>It's a <em>Way of Life.</em></h2>
+        <div class="gold-rule"></div>
+        <p class="section-desc">
+          Kapai is a community-driven Speciality Coffee House and Bistro with a soothing ambience built for your daily Coffee run. We intend on serving you the finest coffee paired with a vibrant variety of fooding options — including all-day breakfast and much more.
+        </p>
+        <blockquote class="about-quote">
+          "We Intend on serving you the best kind of Coffee with a Variety of Fooding options including all day breakfast and much more."
+        </blockquote>
+        <p class="about-hashtag">#Antisarkapai</p>
+        <div class="about-features">
+          <div class="about-feature">
+            <span class="about-feature-num">100%</span>
+            <span class="about-feature-label">Specialty Grade</span>
+          </div>
+          <div class="about-feature">
+            <span class="about-feature-num">All Day</span>
+            <span class="about-feature-label">Breakfast Menu</span>
+          </div>
+          <div class="about-feature">
+            <span class="about-feature-num">1 Place</span>
+            <span class="about-feature-label">Infinite Vibes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Signature Brews -->
+  <section id="brews">
+    <div class="brews-header reveal">
+      <span class="section-eyebrow">From Our Bar</span>
+      <h2 class="section-title">Crafted With <em>Intention</em></h2>
+      <div class="gold-rule" style="margin: 24px auto;"></div>
+      <p class="section-desc" style="margin: 0 auto; text-align: center;">
+        Every cup tells a story. Our baristas pour knowledge, passion and precision into every single brew — from the first espresso pull to the final latte art stroke.
+      </p>
+    </div>
+    <div class="brews-grid">
+      <div class="brew-card reveal">
+        <img src="Kapai images/expresso boom coffee.jpg" alt="Espresso Boom" loading="lazy" />
+        <div class="brew-card-overlay">
+          <span class="brew-tag">Espresso</span>
+          <h3 class="brew-name">Espresso Boom</h3>
+          <p class="brew-desc">A bold, concentrated shot of perfection — rich crema, dark chocolate notes with a lingering smoky finish.</p>
+        </div>
+      </div>
+      <div class="brew-card reveal" style="transition-delay:0.15s">
+        <img src="Kapai images/Mango-Coffe kapai.jpg" alt="Mango Coffee" loading="lazy" />
+        <div class="brew-card-overlay">
+          <span class="brew-tag">Signature</span>
+          <h3 class="brew-name">Mango Cold Brew</h3>
+          <p class="brew-desc">Our tropical twist on cold brew — silky mango infused with slow-steeped single-origin coffee over ice.</p>
+        </div>
+      </div>
+      <div class="brew-card reveal" style="transition-delay:0.3s">
+        <img src="Kapai images/peech coffee new.jpg" alt="Peach Coffee" loading="lazy" />
+        <div class="brew-card-overlay">
+          <span class="brew-tag">Seasonal</span>
+          <h3 class="brew-name">Peach Brew</h3>
+          <p class="brew-desc">Blush-toned, fruity and refreshing — delicate peach meets specialty espresso in this crowd favourite.</p>
+        </div>
+      </div>
+      <div class="brew-card reveal" style="transition-delay:0.45s">
+        <img src="Kapai images/cupid matcha .jpg" alt="Cupid Matcha" loading="lazy" />
+        <div class="brew-card-overlay">
+          <span class="brew-tag">Matcha</span>
+          <h3 class="brew-name">Cupid Matcha</h3>
+          <p class="brew-desc">Ceremonial grade matcha layered with steamed oat milk — vibrant, earthy and utterly beautiful.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- More coffees row -->
+    <div class="brews-grid" style="margin-top:3px; grid-template-columns: repeat(3,1fr);">
+      <div class="brew-card reveal">
+        <img src="Kapai images/sweet red coffe with flower.jpg" alt="Sweet Rose Coffee" loading="lazy" />
+        <div class="brew-card-overlay">
+          <span class="brew-tag">Special</span>
+          <h3 class="brew-name">Bloom & Brew</h3>
+          <p class="brew-desc">A stunning rose-infused pour — visually breathtaking and delicately floral on the palate.</p>
+        </div>
+      </div>
+      <div class="brew-card reveal" style="transition-delay:0.15s">
+        <img src="Kapai images/nrml Coffee mood theme.jpg" alt="Classic Coffee Mood" loading="lazy" />
+        <div class="brew-card-overlay">
+          <span class="brew-tag">Classic</span>
+          <h3 class="brew-name">The Kapai Classic</h3>
+          <p class="brew-desc">Clean, balanced and deeply satisfying — our house espresso blend pulled to pure perfection.</p>
+        </div>
+      </div>
+      <div class="brew-card reveal" style="transition-delay:0.3s">
+        <img src="Kapai images/coffee with spoon.jpg" alt="Coffee with Spoon" loading="lazy" />
+        <div class="brew-card-overlay">
+          <span class="brew-tag">Pour Over</span>
+          <h3 class="brew-name">The Slow Pour</h3>
+          <p class="brew-desc">Take your time. Single origin beans, hand-poured with patience — every cup a meditation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cinematic Break -->
+  <div class="cinematic-break">
+    <img src="Kapai images/brew machine look cat 0.jpg" alt="Brew machine" loading="lazy" />
+    <div class="cinematic-break-overlay"></div>
+    <div class="cinematic-text reveal">
+      <h2>The Art of the <em>Perfect Brew</em></h2>
+      <p>Precision · Passion · Provenance</p>
+    </div>
+  </div>
+
+  <!-- Menu -->
+  <section id="menu">
+    <div class="menu-header">
+      <div class="reveal-left">
+        <span class="section-eyebrow">What We Serve</span>
+        <h2 class="section-title">Our <em>Menu</em></h2>
+      </div>
+      <div class="menu-tabs reveal-right">
+        <button class="menu-tab active" data-tab="breakfast">Breakfast</button>
+        <button class="menu-tab" data-tab="bites">Bites & Bowls</button>
+        <button class="menu-tab" data-tab="more">More</button>
+      </div>
+    </div>
+
+    <!-- Breakfast Panel -->
+    <div class="menu-panel active" id="panel-breakfast">
+      <div class="menu-grid">
+        <div class="menu-card reveal">
+          <div class="menu-card-img">
+            <img src="Kapai images/english platter cat 1.jpg" alt="English Breakfast Platter" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <div class="menu-card-cat">All Day Breakfast</div>
+            <div class="menu-card-name">English Breakfast Platter</div>
+            <div class="menu-card-desc">A full English experience — eggs, toast, grilled tomato and all the morning essentials done right.</div>
+          </div>
+        </div>
+        <div class="menu-card reveal" style="transition-delay:0.1s">
+          <div class="menu-card-img">
+            <img src="Kapai images/pancake bowl -cat 1.jpg" alt="Pancake Bowl" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <div class="menu-card-cat">Sweet Breakfast</div>
+            <div class="menu-card-name">Pancake Bowl</div>
+            <div class="menu-card-desc">Fluffy stacked pancakes topped with fresh fruits, honey drizzle and whipped cream — morning bliss.</div>
+          </div>
+        </div>
+        <div class="menu-card reveal" style="transition-delay:0.2s">
+          <div class="menu-card-img">
+            <img src="Kapai images/oat meal cat 1.jpg" alt="Oatmeal" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <div class="menu-card-cat">Healthy Start</div>
+            <div class="menu-card-name">Signature Oat Bowl</div>
+            <div class="menu-card-desc">Slow-cooked oats with seasonal toppings, nuts and natural sweeteners. Wholesome and beautiful.</div>
+          </div>
+        </div>
+        <div class="menu-card reveal" style="transition-delay:0.3s">
+          <div class="menu-card-img">
+            <img src="Kapai images/smash avo egg cat 1.jpg" alt="Smashed Avocado" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <div class="menu-card-cat">Brunch Favourite</div>
+            <div class="menu-card-name">Smashed Avo & Egg</div>
+            <div class="menu-card-desc">House-made sourdough, creamy smashed avocado and a perfectly poached egg. Simple. Iconic.</div>
+          </div>
+        </div>
+        <div class="menu-card reveal" style="transition-delay:0.4s">
+          <div class="menu-card-img">
+            <img src="Kapai images/sweet pancake good.jpg" alt="Sweet Pancake" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <div class="menu-card-cat">Sweet</div>
+            <div class="menu-card-name">Mini Pancake Stack</div>
+            <div class="menu-card-desc">Light and airy mini pancakes served with fresh berries, maple syrup and a dusting of icing sugar.</div>
+          </div>
+        </div>
+        <div class="menu-card reveal" style="transition-delay:0.5s">
+          <div class="menu-card-img">
+            <img src="Kapai images/nutella bowl cat 1.jpg" alt="Nutella Bowl" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <div class="menu-card-cat">Indulgent</div>
+            <div class="menu-card-name">Nutella Dream Bowl</div>
+            <div class="menu-card-desc">Warm, indulgent Nutella bowl with crunchy granola, bananas and a swirl of hazelnut goodness.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bites Panel -->
+    <div class="menu-panel" id="panel-bites">
+      <div class="menu-grid">
+        <div class="menu-card reveal">
+          <div class="menu-card-img">
+            <img src="Kapai images/green salad boal cat 1.jpg" alt="Green Salad Bowl" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <div class="menu-card-cat">Salads & Bowls</div>
+            <div class="menu-card-name">Green Garden Bowl</div>
+            <div class="menu-card-desc">Fresh seasonal greens, house dressing, seeds and grains — a bowl full of goodness and colour.</div>
+          </div>
+        </div>
+        <div class="menu-card reveal" style="transition-delay:0.1s">
+          <div class="menu-card-img">
+            <img src="Kapai images/burger kapai.jpg" alt="Kapai Burger" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <div class="menu-card-cat">Burgers</div>
+            <div class="menu-card-name">Kapai Smash Burger</div>
+            <div class="menu-card-desc">Double-smashed patty, melted cheese, caramelised onions and our secret sauce. The real deal.</div>
+          </div>
+        </div>
+        <div class="menu-card reveal" style="transition-delay:0.2s">
+          <div class="menu-card-img">
+            <img src="Kapai images/brownie image.jpg" alt="Brownie" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <div class="menu-card-cat">Dessert</div>
+            <div class="menu-card-name">Fudge Brownie</div>
+            <div class="menu-card-desc">Warm, gooey dark chocolate brownie served with a scoop of vanilla bean gelato. Pure decadence.</div>
+          </div>
+        </div>
+        <div class="menu-card reveal" style="transition-delay:0.3s">
+          <div class="menu-card-img">
+            <img src="Kapai images/red pasta cat 0.jpg" alt="Red Pasta" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <div class="menu-card-cat">Pasta</div>
+            <div class="menu-card-name">Arrabbiata Pasta</div>
+            <div class="menu-card-desc">Al dente penne in a fiery tomato and garlic sauce, topped with fresh basil and parmesan shavings.</div>
+          </div>
+        </div>
+        <div class="menu-card reveal" style="transition-delay:0.4s">
+          <div class="menu-card-img">
+            <img src="Kapai images/family health cat 0.jpg" alt="Family Health Platter" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <div class="menu-card-cat">Sharing</div>
+            <div class="menu-card-name">Family Health Platter</div>
+            <div class="menu-card-desc">A generous sharing board of fresh, wholesome bites designed for moments worth savouring together.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- More Panel -->
+    <div class="menu-panel" id="panel-more">
+      <div class="menu-grid">
+        <div class="menu-card reveal">
+          <div class="menu-card-img">
+            <img src="Kapai images/butter garlic momo cat 2.jpg" alt="Butter Garlic Momos" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <div class="menu-card-cat">Snacks</div>
+            <div class="menu-card-name">Butter Garlic Momos</div>
+            <div class="menu-card-desc">Pan-fried momos tossed in rich butter-garlic sauce — our most talked-about crowd pleaser.</div>
+          </div>
+        </div>
+        <div class="menu-card reveal" style="transition-delay:0.1s">
+          <div class="menu-card-img">
+            <img src="Kapai images/maggie ramen cat 2.jpg" alt="Maggie Ramen" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <div class="menu-card-cat">Noodles</div>
+            <div class="menu-card-name">Kapai Ramen Noodles</div>
+            <div class="menu-card-desc">A gourmet take on your childhood favourite — elevated with rich broth, soft egg and toppings.</div>
+          </div>
+        </div>
+        <div class="menu-card reveal" style="transition-delay:0.2s">
+          <div class="menu-card-img">
+            <img src="Kapai images/pancake mini cat 1.jpg" alt="Pancake Mini" loading="lazy" />
+          </div>
+          <div class="menu-card-body">
+            <div class="menu-card-cat">Minis</div>
+            <div class="menu-card-name">Bite-Size Pancakes</div>
+            <div class="menu-card-desc">Perfect little bites of happiness — our miniature pancakes are great as a snack any time of day.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The Vibe Gallery -->
+  <section id="vibe">
+    <div class="vibe-header">
+      <span class="section-eyebrow reveal">Our World</span>
+      <h2 class="section-title reveal">The <em>Kapai</em> Vibe</h2>
+      <div class="gold-rule reveal" style="margin: 24px auto;"></div>
+    </div>
+
+    <div class="vibe-grid">
+      <div class="vibe-cell vibe-cell-1">
+        <img src="Kapai images/crowd in kapi.jpg" alt="Kapai crowd" loading="lazy" />
+        <div class="vibe-overlay-card"><p>Where community gathers</p></div>
+      </div>
+      <div class="vibe-cell vibe-cell-2">
+        <img src="Kapai images/coffee with spoon.jpg" alt="Coffee close up" loading="lazy" />
+        <div class="vibe-overlay-card"><p>Every sip, intentional</p></div>
+      </div>
+      <div class="vibe-cell vibe-cell-3">
+        <img src="Kapai images/kapai outer small look.jpg" alt="Kapai exterior" loading="lazy" />
+        <div class="vibe-overlay-card"><p>Your next favourite spot</p></div>
+      </div>
+      <div class="vibe-cell vibe-cell-4">
+        <img src="Kapai images/brew machine look cat 0.jpg" alt="Brew machine" loading="lazy" />
+        <div class="vibe-overlay-card"><p>The craft behind every cup</p></div>
+      </div>
+      <div class="vibe-cell vibe-cell-5">
+        <img src="Kapai images/sweet red coffe with flower.jpg" alt="Bloom coffee" loading="lazy" />
+        <div class="vibe-overlay-card"><p>Beauty in every pour</p></div>
+      </div>
+      <div class="vibe-cell vibe-cell-6">
+        <img src="Kapai images/nrml Coffee mood theme.jpg" alt="Coffee mood" loading="lazy" />
+        <div class="vibe-overlay-card"><p>That feeling. You know it.</p></div>
+      </div>
+    </div>
+
+    <div class="vibe-tagline">
+      <h2 class="reveal">Come for the <em>Coffee.</em><br>Stay for the <em>Vibe.</em></h2>
+    </div>
+  </section>
+
+  <!-- Our Space -->
+  <section id="space">
+    <div class="space-inner">
+      <div class="space-image reveal-left">
+        <img src="Kapai images/kapai outer small look.jpg" alt="Kapai exterior" loading="lazy" />
+      </div>
+      <div class="space-text reveal-right">
+        <span class="section-eyebrow">Find Your Corner</span>
+        <h2 class="section-title">A Space<br>Built for <em>Belonging</em></h2>
+        <div class="gold-rule"></div>
+        <p class="section-desc">
+          Nestled in the heart of Model Town, Kanpur — Kapai is more than a café. It's your third place. Whether you're catching up with a friend, plugging in to work, or simply stealing a quiet moment with a great cup, this space was made for you.
+        </p>
+        <div class="space-features">
+          <div class="space-feat">
+            <div class="space-feat-icon">☕</div>
+            <div class="space-feat-title">Specialty Coffee Bar</div>
+            <div class="space-feat-desc">Precision-pulled espresso shots and specialty brews from curated single-origin beans.</div>
+          </div>
+          <div class="space-feat">
+            <div class="space-feat-icon">🍳</div>
+            <div class="space-feat-title">All Day Kitchen</div>
+            <div class="space-feat-desc">Our kitchen never stops — breakfast, lunch, snacks and everything in between, all day long.</div>
+          </div>
+          <div class="space-feat">
+            <div class="space-feat-icon">🎶</div>
+            <div class="space-feat-title">Curated Ambience</div>
+            <div class="space-feat-desc">Soothing music, warm lighting and an atmosphere that feels like home from the first visit.</div>
+          </div>
+          <div class="space-feat">
+            <div class="space-feat-icon">🤝</div>
+            <div class="space-feat-title">Community First</div>
+            <div class="space-feat-desc">A space where strangers become regulars and regulars become family. This is the Kapai way.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Founder -->
+  <section id="founder">
+    <div class="founder-inner">
+      <div class="founder-img-wrap reveal-left">
+        <img src="Kapai images/founder added kapai.jpg" alt="Kapai Founder" loading="lazy" />
+      </div>
+      <div class="founder-content reveal-right">
+        <span class="section-eyebrow">A Message From Us</span>
+        <h2 class="section-title">The <em>Heart</em> Behind<br>Every Cup</h2>
+        <div class="gold-rule"></div>
+        <p class="section-desc">
+          Kapai wasn't built to be just another café. It was built to be a feeling — a community — a promise.
+        </p>
+        <blockquote class="founder-note">
+          "Kapai is a community driven Speciality Coffee house and Bistro with a soothing ambience for your Coffee run. We intend on serving you the best kind of Coffee with a Variety of Fooding options including all day breakfast and much more."
+        </blockquote>
+        <p class="founder-name">— The Kapai Family</p>
+        <p class="founder-role">Founders · Coffee House &amp; Bistro · Kanpur</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Order / Delivery -->
+  <section id="order">
+    <div class="order-inner">
+      <span class="section-eyebrow reveal" style="display:block">Get Kapai Delivered</span>
+      <h2 class="section-title reveal">Order Your <em>Favourite</em><br>From Wherever You Are</h2>
+      <div class="gold-rule reveal" style="margin: 24px auto;"></div>
+      <p class="section-desc reveal" style="margin: 0 auto; text-align:center;">
+        Craving that signature Mango Cold Brew or a warm brownie? We bring the Kapai experience right to your doorstep. Order fresh, straight from our kitchen.
+      </p>
+      <div class="order-platforms">
+        <a href="https://www.swiggy.com" target="_blank" rel="noopener" class="platform-btn reveal">
+          <span class="btn-icon">🛵</span>
+          <span class="btn-text">
+            <span class="btn-label">Order via</span>
+            <span class="btn-name">Swiggy</span>
+          </span>
+        </a>
+        <a href="https://www.eazydiner.com" target="_blank" rel="noopener" class="platform-btn reveal" style="transition-delay:0.15s">
+          <span class="btn-icon">🍽️</span>
+          <span class="btn-text">
+            <span class="btn-label">Reserve via</span>
+            <span class="btn-name">EazyDiner</span>
+          </span>
+        </a>
+        <a href="tel:+919839270027" class="platform-btn reveal" style="transition-delay:0.3s">
+          <span class="btn-icon">📞</span>
+          <span class="btn-text">
+            <span class="btn-label">Call to Order</span>
+            <span class="btn-name">+91 98392 70027</span>
+          </span>
+        </a>
+      </div>
+      <div class="order-reserve reveal">
+        <p>Dine-in reservations available on <a href="https://www.eazydiner.com" target="_blank" rel="noopener">EazyDiner</a> &nbsp;·&nbsp; Delivery via <a href="https://www.swiggy.com" target="_blank" rel="noopener">Swiggy</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">KAPAI</div>
+        <div class="footer-tagline">Coffee House & Bistro</div>
+        <p class="footer-desc">
+          A community-driven Speciality Coffee house and Bistro with a soothing ambience built for your daily coffee run — and so much more.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#brews">Our Brews</a></li>
+          <li><a href="#menu">Full Menu</a></li>
+          <li><a href="#vibe">The Vibe</a></li>
+          <li><a href="#founder">Our Story</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Order & Reserve</h4>
+        <ul>
+          <li><a href="https://www.swiggy.com" target="_blank" rel="noopener">Order on Swiggy</a></li>
+          <li><a href="https://www.eazydiner.com" target="_blank" rel="noopener">Reserve on EazyDiner</a></li>
+          <li><a href="tel:+919839270027">Call Us Directly</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Find Us</h4>
+        <div class="footer-address">
+          <div class="addr-item">
+            <span class="addr-icon">📍</span>
+            <div class="addr-text">
+              117/H-1/62A, near Candy Floss School,<br>
+              Model Town, Pandu Nagar,<br>
+              Kanpur, Uttar Pradesh 208005
+            </div>
+          </div>
+          <div class="addr-item">
+            <span class="addr-icon">📞</span>
+            <div class="addr-text">
+              <a href="tel:+919839270027">+91 98392 70027</a>
+            </div>
+          </div>
+          <div class="addr-item">
+            <span class="addr-icon">🏛️</span>
+            <div class="addr-text">
+              Located in The Gyan's Avenue<br>
+              <span style="font-size:0.75rem; color: var(--brown-muted);">~22 mins from city centre</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2024 Kapai Coffee House & Bistro. All rights reserved. · Kanpur, UP</p>
+      <span class="footer-hash">#Antisarkapai</span>
+    </div>
+  </footer>
+
+  <!-- Back to Top -->
+  <button id="back-top" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"></polyline></svg>
+  </button>
+
+  <script>
+    /* ═══════════════════════════════════════════
+       LOADER
+    ═══════════════════════════════════════════ */
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('hide');
+        document.getElementById('hero').classList.add('loaded');
+      }, 2400);
+    });
+
+    /* ═══════════════════════════════════════════
+       CUSTOM CURSOR
+    ═══════════════════════════════════════════ */
+    const dot  = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+    let mouseX = 0, mouseY = 0;
+    let ringX  = 0, ringY  = 0;
+
+    document.addEventListener('mousemove', e => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      dot.style.left  = mouseX + 'px';
+      dot.style.top   = mouseY + 'px';
+    });
+
+    (function animateCursor() {
+      ringX += (mouseX - ringX) * 0.12;
+      ringY += (mouseY - ringY) * 0.12;
+      ring.style.left = ringX + 'px';
+      ring.style.top  = ringY + 'px';
+      requestAnimationFrame(animateCursor);
+    })();
+
+    document.querySelectorAll('a, button, .brew-card, .menu-card, .vibe-cell, .space-feat, .platform-btn').forEach(el => {
+      el.addEventListener('mouseenter', () => ring.classList.add('expand'));
+      el.addEventListener('mouseleave', () => ring.classList.remove('expand'));
+    });
+
+    /* ═══════════════════════════════════════════
+       NAVBAR SCROLL
+    ═══════════════════════════════════════════ */
+    const navbar   = document.getElementById('navbar');
+    const backTop  = document.getElementById('back-top');
+
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      navbar.classList.toggle('scrolled', y > 60);
+      backTop.classList.toggle('show', y > 400);
+    }, { passive: true });
+
+    /* ═══════════════════════════════════════════
+       MOBILE MENU
+    ═══════════════════════════════════════════ */
+    document.getElementById('hamburger').addEventListener('click', () => {
+      document.getElementById('mobileMenu').classList.add('open');
+    });
+    document.getElementById('mobileClose').addEventListener('click', closeMobile);
+
+    function closeMobile() {
+      document.getElementById('mobileMenu').classList.remove('open');
+    }
+
+    /* ═══════════════════════════════════════════
+       MENU TABS
+    ═══════════════════════════════════════════ */
+    document.querySelectorAll('.menu-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+        // Re-trigger reveal for newly shown cards
+        document.querySelectorAll('#panel-' + tab.dataset.tab + ' .reveal').forEach(el => {
+          el.classList.remove('visible');
+          setTimeout(() => el.classList.add('visible'), 50);
+        });
+      });
+    });
+
+    /* ═══════════════════════════════════════════
+       SCROLL REVEAL (IntersectionObserver)
+    ═══════════════════════════════════════════ */
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
+      revealObs.observe(el);
+    });
+
+    /* ═══════════════════════════════════════════
+       HERO PARALLAX
+    ═══════════════════════════════════════════ */
+    const heroBg = document.querySelector('.hero-bg');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY < window.innerHeight) {
+        heroBg.style.transform = `scale(1) translateY(${window.scrollY * 0.35}px)`;
+      }
+    }, { passive: true });
+
+    /* ═══════════════════════════════════════════
+       CINEMATIC PARALLAX
+    ═══════════════════════════════════════════ */
+    const cinemaImg = document.querySelector('.cinematic-break img');
+    if (cinemaImg) {
+      const cinemaObs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const handleScroll = () => {
+              const rect = document.querySelector('.cinematic-break').getBoundingClientRect();
+              const offset = (window.innerHeight / 2 - rect.top - rect.height / 2) * 0.25;
+              cinemaImg.style.transform = `translateY(${offset}px)`;
+            };
+            window.addEventListener('scroll', handleScroll, { passive: true });
+          }
+        });
+      }, { threshold: 0 });
+      cinemaObs.observe(document.querySelector('.cinematic-break'));
+    }
+
+    /* ═══════════════════════════════════════════
+       ACTIVE NAV LINK HIGHLIGHT
+    ═══════════════════════════════════════════ */
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    const sectionObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.style.color = link.getAttribute('href') === '#' + entry.target.id
+              ? 'var(--gold-light)'
+              : '';
+          });
+        }
+      });
+    }, { threshold: 0.45 });
+
+    sections.forEach(s => sectionObs.observe(s));
+  </script>
+</body>
+</html>
