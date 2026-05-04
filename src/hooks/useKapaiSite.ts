@@ -76,8 +76,7 @@ export function useKapaiSite() {
           const id = entry.target.id
           navLinks.forEach((link) => {
             const href = link.getAttribute('href')
-            link.style.color =
-              href === `#${id}` ? 'var(--gold-light)' : ''
+            link.classList.toggle('is-active', href === `#${id}`)
           })
         })
       },

@@ -246,6 +246,12 @@
     }
     .nav-links a:hover { color: var(--gold-light); }
     .nav-links a:hover::after { width: 100%; }
+    .nav-links a.is-active {
+      color: var(--gold-light);
+    }
+    .nav-links a.is-active::after {
+      width: 100%;
+    }
 
     .nav-cta {
       padding: 10px 24px;
@@ -1362,17 +1368,63 @@
     /* ═══════════════════════════════════════════════════
        LIGHT THEME — READABLE OVERLAYS ON PHOTO SECTIONS
     ═══════════════════════════════════════════════════ */
+    /* Nav over hero: theme tokens are for solid cream bars — on the photo they
+       vanish. Use light type + shadow until the bar is scrolled on. */
+    [data-theme="light"] nav:not(.scrolled) .nav-logo-title {
+      color: #f2e4d4;
+      text-shadow: 0 2px 16px rgba(0, 0, 0, 0.45);
+    }
+    [data-theme="light"] nav:not(.scrolled) .nav-logo-sub {
+      color: rgba(255, 245, 235, 0.78);
+      text-shadow: 0 1px 10px rgba(0, 0, 0, 0.4);
+    }
+    [data-theme="light"] nav:not(.scrolled) .nav-links a {
+      color: rgba(255, 250, 242, 0.92);
+      text-shadow: 0 1px 10px rgba(0, 0, 0, 0.42);
+    }
+    [data-theme="light"] nav:not(.scrolled) .nav-links a:hover {
+      color: #fff;
+    }
+    [data-theme="light"] nav:not(.scrolled) .nav-links a.is-active {
+      color: #fcecc8;
+      text-shadow: 0 1px 12px rgba(0, 0, 0, 0.55);
+    }
+    [data-theme="light"] nav:not(.scrolled) .nav-links a.is-active:hover {
+      color: #fff;
+    }
+    [data-theme="light"] nav:not(.scrolled) .nav-cta {
+      border-color: rgba(255, 248, 240, 0.55);
+      color: rgba(255, 252, 248, 0.96);
+      text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
+    }
+    [data-theme="light"] nav:not(.scrolled) .nav-cta:hover {
+      background: rgba(255, 252, 248, 0.95);
+      color: var(--ink);
+      text-shadow: none;
+    }
+    [data-theme="light"] nav:not(.scrolled) .nav-hamburger span {
+      background: rgba(255, 252, 248, 0.92);
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+    }
+
     /* Hero (light): dark scrim + light typography — avoids washed gold-on-white */
     [data-theme="light"] #hero .hero-bg-img {
       filter: brightness(0.88) saturate(0.92);
     }
     [data-theme="light"] .hero-overlay {
-      background: linear-gradient(
-        155deg,
-        rgba(12, 9, 7, 0.58) 0%,
-        rgba(28, 22, 18, 0.48) 42%,
-        rgba(18, 14, 11, 0.56) 100%
-      );
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(6, 4, 2, 0.55) 0%,
+          rgba(6, 4, 2, 0.22) 28%,
+          transparent 52%
+        ),
+        linear-gradient(
+          155deg,
+          rgba(12, 9, 7, 0.58) 0%,
+          rgba(28, 22, 18, 0.48) 42%,
+          rgba(18, 14, 11, 0.56) 100%
+        );
     }
     [data-theme="light"] .hero-eyebrow {
       color: #f2e4d4;
