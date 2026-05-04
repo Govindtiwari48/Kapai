@@ -1,15 +1,26 @@
+import type { KapaiTheme } from '../hooks/useKapaiTheme'
 import { publicImg } from '../paths'
 import { OptimizedImage } from './OptimizedImage'
 
-type Props = { onOpenMenu: () => void }
+type Props = {
+  onOpenMenu: () => void
+  theme: KapaiTheme
+  onToggleTheme: () => void
+}
 
-export function NavBar({ onOpenMenu }: Props) {
+export function NavBar({ onOpenMenu, theme, onToggleTheme }: Props) {
   return (
     <nav id="navbar">
-      <a
-        href="#hero"
+      <button
+        type="button"
         className="nav-logo"
-        aria-label="Kapai — Coffee House & Bistro"
+        onClick={onToggleTheme}
+        aria-label={
+          theme === 'dark'
+            ? 'Switch to light theme'
+            : 'Switch to dark theme'
+        }
+        title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
       >
         <OptimizedImage
           src={publicImg('kapai logo.jpg')}
@@ -20,7 +31,7 @@ export function NavBar({ onOpenMenu }: Props) {
           <span className="nav-logo-title">KAPAI</span>
           <span className="nav-logo-sub">Coffee House & Bistro</span>
         </span>
-      </a>
+      </button>
       <ul className="nav-links">
         <li>
           <a href="#about">About</a>

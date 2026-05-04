@@ -1,14 +1,21 @@
+import type { KapaiTheme } from '../hooks/useKapaiTheme'
 import { publicImg } from '../paths'
 import { OptimizedImage } from './OptimizedImage'
 
-type Props = { loaded: boolean }
+type Props = { loaded: boolean; theme: KapaiTheme }
 
-export function HeroSection({ loaded }: Props) {
+export function HeroSection({ loaded, theme }: Props) {
+  const heroImg =
+    theme === 'light'
+      ? 'coffee with spoon.jpg'
+      : 'sweet red coffe with flower.jpg'
+
   return (
     <section id="hero" className={loaded ? 'loaded' : undefined}>
       <div className="hero-bg">
         <OptimizedImage
-          src={publicImg('sweet red coffe with flower.jpg')}
+          key={heroImg}
+          src={publicImg(heroImg)}
           alt="Kapai signature coffee"
           className="hero-bg-img"
           priority

@@ -156,17 +156,42 @@ export function MainSections() {
         </div>
         <div className="vibe-grid">
           {[
-            ['vibe-cell-1', 'crowd in kapi.jpg', 'Kapai crowd', 'Where community gathers'],
-            ['vibe-cell-2', 'coffee with spoon.jpg', 'Coffee close up', 'Every sip, intentional'],
-            ['vibe-cell-3', 'kapai outer small look.jpg', 'Kapai exterior', 'Your next favourite spot'],
-            ['vibe-cell-4', 'brew machine look cat 0.jpg', 'Brew machine', 'The craft behind every cup'],
+            [
+              'vibe-cell-1',
+              'crowd in kapi.jpg',
+              'Kapai crowd and community',
+              'Where community gathers',
+            ],
+            [
+              'vibe-cell-2',
+              'english platter cat 1.jpg',
+              'English breakfast platter at Kapai',
+              'Long tables, slow mornings',
+            ],
+            [
+              'vibe-cell-3',
+              'pancake bowl -cat 1.jpg',
+              'Pancake bowl at Kapai',
+              'Stacks worth stopping for',
+            ],
+            [
+              'vibe-cell-4',
+              'oat meal cat 1.jpg',
+              'Signature oat bowl at Kapai',
+              'Wholesome starts, every day',
+            ],
             [
               'vibe-cell-5',
-              'peech coffee new.jpg',
-              'Peach coffee at Kapai',
-              'Blush tones, signature pour',
+              'smash avo egg cat 1.jpg',
+              'Smashed avo and egg at Kapai',
+              'Brunch favourites, done right',
             ],
-            ['vibe-cell-6', 'nrml Coffee mood theme.jpg', 'Coffee mood', 'That feeling. You know it.'],
+            [
+              'vibe-cell-6',
+              'sweet pancake good.jpg',
+              'Mini pancake stack at Kapai',
+              'Sweet moments on every plate',
+            ],
           ].map(([cls, file, alt, cap]) => (
             <div className={`vibe-cell ${cls}`} key={cls}>
               <OptimizedImage src={publicImg(file)} alt={alt} />
